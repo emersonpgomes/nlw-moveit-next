@@ -1,10 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ChallengesContext } from "../contexts/challenges";
+import React, { useContext } from "react";
+import { CountdownContext } from "../contexts/countdown";
 import styles from "../styles/components/countdown.module.css";
-
-const defaultTime = 0.1 * 60;
-
-let countdownTimeout: NodeJS.Timeout;
 
 function getDigits(number: number) {
   return String(number).padStart(2, "0").split("");
@@ -13,38 +9,17 @@ function getDigits(number: number) {
 export interface CountdownProps {}
 
 export const Countdown = (props: CountdownProps) => {
-  const [time, setTime] = useState(defaultTime);
-  const [isActive, setIsActive] = useState(false);
-  const [hasFinshed, setHasFinished] = useState(false);
-  const { startNewChallenge } = useContext(ChallengesContext);
-
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
+  const {
+    minutes,
+    seconds,
+    hasFinshed,
+    isActive,
+    resetCountdown,
+    startCountdown,
+  } = useContext(CountdownContext);
 
   const [minutesLeft, minutesRight] = getDigits(minutes);
   const [secondsLeft, secondsRight] = getDigits(seconds);
-
-  function startCountdown() {
-    setIsActive(true);
-  }
-
-  function resetCountdown() {
-    clearTimeout(countdownTimeout);
-    setIsActive(false);
-    setTime(defaultTime);
-  }
-
-  useEffect(() => {
-    if (isActive && time > 0) {
-      countdownTimeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
-    } else if (isActive && time === 0) {
-      setHasFinished(true);
-      setIsActive(false);
-      startNewChallenge();
-    }
-  }, [isActive, time]);
 
   return (
     <>
@@ -66,7 +41,7 @@ export const Countdown = (props: CountdownProps) => {
           type="button"
           className={`${styles.countdownButton} ${styles.countdownButtonSuccess}`}
         >
-          Ciclo encerrado <img src="icons/level.svg" alt="" />
+          Ciclo encerrado
         </button>
       ) : (
         <>
