@@ -8,7 +8,7 @@ import {
 } from "react";
 import { ChallengesContext } from "./challenges";
 
-const defaultTime = 0.1 * 60;
+const defaultTime = 25 * 60;
 
 export interface CountdownContextData {
   minutes: number;
